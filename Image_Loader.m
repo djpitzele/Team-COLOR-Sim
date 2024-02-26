@@ -10,23 +10,33 @@ full_directory = fullfile(directory, image_name);
 
 % Load in image
 img_RGB = imread(full_directory);
-imshow(img_RGB)
-whos
 
-% RGB to LMS
-% https://arxiv.org/pdf/1711.10662.pdf
-rgb_to_lms = [17.8824 43.5161 4.1194; 3.4557 27.1554 3.8671; 0.0300 0.1843 1.4671];
 
-img_RGB = double(img_RGB);
+% sRGB to linear RGB
+img_RGB = rgb2lin(img_RGB);
+img_RGB = im2double(img_RGB);
+
+% RGB to XYZ (CIE 1931 edition)
+img_XYZ = rgb2xyz(img_RGB);
+
+
+% XYZ to LMS
+xyz_to_lms = [0.38971 0.68898 -0.07868;
+              -0.22981 1.18340 0.04641;
+              0 0 1];
+
 size1 = size(img_RGB,1);
 size2 = size(img_RGB,2);
 img_LMS = zeros(size1,size2,3);
-size(img_LMS,3)
-whos
+mod_XYZ = zeros(size1,size2,3);
 for x = 1:size1
     for y = 1:size2
-        img_LMS(x,y) = img_RGB(x,y) * rgb_to_lms
+        img_LMS(x,y,:) = xyz_to_lms * squeeze(img_XYZ(x,y,:));
+        img_LMS(x,y,1) = 0;
+        mod_XYZ(x,y,:) = squeeze(img_LMS(x,y,:));
     end
 end
 
-% why is is erroring?
+% going back
+mod_RGB = xyz2rgb(mod_XYZ);
+imshowpair(img_RGB,mod_RGB,'montage')
