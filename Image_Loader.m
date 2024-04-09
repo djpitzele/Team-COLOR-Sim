@@ -10,6 +10,7 @@ green_shift = 0;
 directory = "C:\Users\dpitz\color-sim\Team-COLOR-Sim\test_images";
 
 %% Full directory to image
+%% Full directory to image
 full_directory = fullfile(directory, image_name);
 
 %% Load in csvs
@@ -99,6 +100,9 @@ img_RGB = im2double(img_RGB);
 
 
 %% RGB to XYZ (CIE 1931 edition)
+
+
+%% RGB to XYZ (CIE 1931 edition)
 img_XYZ = rgb2xyz(img_RGB);
 
 
@@ -108,6 +112,7 @@ xyz_to_lms = [0.38971 0.68898 -0.07868;
               -0.22981 1.18340 0.04641;
               0 0 1];
 
+%% LMS shift (or map to 0)
 %% LMS shift (or map to 0)
 size1 = size(img_RGB,1);
 size2 = size(img_RGB,2);
@@ -122,6 +127,7 @@ for x = 1:size1
     end
 end
 
+%% going back
 %% going back
 mod_RGB = xyz2rgb(mod_XYZ);
 imshowpair(img_RGB,mod_RGB,'montage')
