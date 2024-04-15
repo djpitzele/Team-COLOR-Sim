@@ -1,4 +1,4 @@
-red_shift = 0;
+red_shift = -15;
 green_shift = 0;
 
 %% Load in csvs

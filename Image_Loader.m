@@ -10,7 +10,6 @@ green_shift = 0;
 directory = "C:\Users\dpitz\color-sim\Team-COLOR-Sim\test_images";
 
 %% Full directory to image
-%% Full directory to image
 full_directory = fullfile(directory, image_name);
 
 %% Load in csvs
@@ -54,6 +53,12 @@ end
 x_data = XYZ_cmf{:,2};      % x column data.
 y_data = XYZ_cmf{:,3};      % y column data.
 z_data = XYZ_cmf{:,4};      % z column data.
+
+% normalize relative to RGB CMFs
+% sum_cmfs = x_data + y_data + z_data;
+% x_data = x_data ./ sum_cmfs;
+% y_data = y_data ./ sum_cmfs;
+% z_data = z_data ./ sum_cmfs;
 
 % X point integrals
 XL_int = sum(x_data .* l_new_data);
@@ -100,9 +105,6 @@ img_RGB = im2double(img_RGB);
 
 
 %% RGB to XYZ (CIE 1931 edition)
-
-
-%% RGB to XYZ (CIE 1931 edition)
 img_XYZ = rgb2xyz(img_RGB);
 
 
@@ -113,7 +115,6 @@ xyz_to_lms = [0.38971 0.68898 -0.07868;
               0 0 1];
 
 %% LMS shift (or map to 0)
-%% LMS shift (or map to 0)
 size1 = size(img_RGB,1);
 size2 = size(img_RGB,2);
 img_LMS = zeros(size1,size2,3);
@@ -123,11 +124,10 @@ for x = 1:size1
         img_LMS(x,y,:) = xyz2cvd_lms * squeeze(img_XYZ(x,y,:));
         % disp(img_LMS(x,y,:))
         % img_LMS(x,y,2) = 0;
-        mod_XYZ(x,y,:) = squeeze(img_LMS(x,y,:));
+        mod_XYZ(x,y,:) = (xyz_to_lms^-1) * squeeze(img_LMS(x,y,:));
     end
 end
 
-%% going back
 %% going back
 mod_RGB = xyz2rgb(mod_XYZ);
 imshowpair(img_RGB,mod_RGB,'montage')
