@@ -1,9 +1,8 @@
-clear all; close all;
 %%Reading in Image
 
-image_name = "butterflies.jpg";
+image_name = "SS_1.png";
 
-img_RGB = imread("butterflies.jpg");
+img_RGB = imread("SS_1.png");
 
 red_shift = 0;
 green_shift = 0;
@@ -32,6 +31,17 @@ img_RGB = im2double(img_RGB);
 % RGB to XYZ (CIE 1931 edition)
 img_XYZ = rgb2xyz(img_RGB);
 
+
+hex1 = img_XYZ(1,1,1);
+hex2 = img_XYZ(1,1,2);
+hex3 = img_XYZ(1,1,3);
+
+pix_X_val = img_XYZ(1,1,1);
+pix_Y_val = img_XYZ(1,1,2);
+pix_Z_val = img_XYZ(1,1,3);
+
+pix_XYZcoord = [pix_X_val,  pix_Y_val, pix_Z_val];
+
 distArr = zeros(441,1);
 
 %creating of the matrix representing the wavelengths that correspond to
@@ -43,17 +53,12 @@ img_Matrix = zeros(sz_img_rows, sz_img_cols);
 
 %Loops through all pixels in the image
 for pix_R = 1: sz_img_rows
-    
     for pix_C = 1: sz_img_cols
 
         %Loops through all the wavelengths
         for i = 1:441
-        pix_X_val = img_XYZ(pix_R,pix_C,1);
-        pix_Y_val = img_XYZ(pix_R,pix_C,2);
-        pix_Z_val = img_XYZ(pix_R,pix_C,3);
-
-        pix_XYZcoord = [pix_X_val,  pix_Y_val, pix_Z_val];
-            
+        
+            %
             wavelength_XYZ = [x_data(i),y_data(i),z_data(i)];
         
             %creates a 2*3 matrix; row 1 has the XYZ values pixels
@@ -66,7 +71,7 @@ for pix_R = 1: sz_img_rows
             temp_dif = sum(temp_dif); 
 
             %dist = pdist(compPoints, 'euclidean');
-            distArr(i) = temp_dif;
+            distArr(i) = dist;
         end
 
         %locate the minimum within the DistArr
@@ -132,7 +137,7 @@ for pix_R = 1: sz_img_rows
         %Instead of using for loop we will index the XYZ matrix to swap
         %these values instead
 
-        image_LMS_CVD(pix_R, pix_C,:) = LMS_new_cmf(img_Matrix(pix_R,pix_C) - 389, 2:4);
+        image_LMS_CVD(pix_R, pix_C,:) = LMS_new_cmf(img_Matrix(pix_R,pix_C), 2:4);
 
         % for lms_wl = 1: size(LMS_new_cmf,1)
         %     if (img_Matrix(pix_R,pix_C) == LMS_new_cmf(lms_wl,1))
@@ -149,21 +154,13 @@ xyz_to_lms = [0.38971 0.68898 -0.07868;
               -0.22981 1.18340 0.04641;
               0 0 1];
 
-image_XYZ_CVD = zeros(size(image_LMS_CVD));
-lms2xyz = inv(xyz_to_lms);
-
 for x = 1: sz_img_rows
     for y =1: sz_img_cols
     
-        image_XYZ_CVD(x,y,:) = lms2xyz * squeeze(image_LMS_CVD(x,y,:));
+        vector_temp = inv(xyz_to_lms) * squeeze(img_LMS_CVD(x,y,:));
 
     end
 end
-
- final_image = xyz2rgb(image_XYZ_CVD);
-
- imshowpair(img_RGB,final_image,'montage')
-
 %CVD_lms_to_XYZ = inv(xyz_to_lms) * transpose(img_LMS_CVD(:,3));
 
 
