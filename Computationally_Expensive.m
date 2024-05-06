@@ -1,9 +1,9 @@
 clear all; close all;
 %%Reading in Image
 
-image_name = "butterflies.jpg";
+image_name = "SS_1.png";
 
-img_RGB = imread("butterflies.jpg");
+img_RGB = imread(image_name);
 
 red_shift = 0;
 green_shift = 0;
@@ -12,7 +12,7 @@ green_shift = 0;
 XYZ_cmf = table2array(readtable('XYZ_data.csv'));
 LMS_cmf = table2array(readtable('LMS_data.csv'));
 
-%normRGB = normalize(img_RGB);
+% normRGB = normalize(img_RGB);
 
 %%sRGB to linRGB
 img_RGB = rgb2lin(img_RGB);
@@ -31,6 +31,12 @@ img_RGB = im2double(img_RGB);
 
 % RGB to XYZ (CIE 1931 edition)
 img_XYZ = rgb2xyz(img_RGB);
+
+% Normalize data points themselves
+sum_points =  img_XYZ(:,1) + img_XYZ(:,2) + img_XYZ(:,3);
+img_XYZ(:,1) = img_XYZ(:,1) ./ sum_points;
+img_XYZ(:,2) = img_XYZ(:,2) ./ sum_points;
+img_XYZ(:,3) = img_XYZ(:,3) ./ sum_points;
 
 distArr = zeros(441,1);
 
@@ -74,6 +80,10 @@ for pix_R = 1: sz_img_rows
 
         %Necessary?
         closest_WL = XYZ_cmf(min_index,1); 
+
+        if pix_R == 1 && pix_C == 1
+            closest_WL
+        end
        
         % %for j = 1:441
         % 
@@ -93,8 +103,9 @@ end
 
 % Interpolate LMS data
 desired_wavelengths = 390:1:830;
+% turning desired_wavelength into a column vector
 desired_wavelengths = desired_wavelengths';
-wavelength_data = LMS_cmf(:,1);         % turning desired_wavelength into a column vector
+wavelength_data = LMS_cmf(:,1);
 l_data = LMS_cmf(:,2);
 m_data = LMS_cmf(:,3);
 s_data = LMS_cmf(:,4);
@@ -132,7 +143,10 @@ for pix_R = 1: sz_img_rows
         %Instead of using for loop we will index the XYZ matrix to swap
         %these values instead
 
-        image_LMS_CVD(pix_R, pix_C,:) = LMS_new_cmf(img_Matrix(pix_R,pix_C) - 389, 2:4);
+        intended_wl = img_Matrix(pix_R,pix_C) - 389;
+        image_LMS_CVD(pix_R, pix_C,1) = LMS_new_cmf(intended_wl, 2);
+        image_LMS_CVD(pix_R, pix_C,2) = LMS_new_cmf(intended_wl, 3);
+        image_LMS_CVD(pix_R, pix_C,3) = LMS_new_cmf(intended_wl, 4);
 
         % for lms_wl = 1: size(LMS_new_cmf,1)
         %     if (img_Matrix(pix_R,pix_C) == LMS_new_cmf(lms_wl,1))
@@ -149,11 +163,16 @@ xyz_to_lms = [0.38971 0.68898 -0.07868;
               -0.22981 1.18340 0.04641;
               0 0 1];
 
+% different one from wikipedia
+%xyz_to_lms = [0.210576 0.855098 -0.0396983;
+%    -0.417076 1.177260 0.0786283;
+%              0 0 0.516835];
+
 image_XYZ_CVD = zeros(size(image_LMS_CVD));
-lms2xyz = inv(xyz_to_lms);
+lms2xyz = xyz_to_lms^-1;
 
 for x = 1: sz_img_rows
-    for y =1: sz_img_cols
+    for y = 1: sz_img_cols
     
         image_XYZ_CVD(x,y,:) = lms2xyz * squeeze(image_LMS_CVD(x,y,:));
 
