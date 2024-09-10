@@ -1,4 +1,4 @@
-red_shift = -15;
+red_shift = 0;
 green_shift = 0;
 
 %% Load in csvs
@@ -55,6 +55,8 @@ ideal_opp_values = lms_to_opp * new_lms_cmfs;
 
 figure
 hold on
-plot(transpose(ideal_opp_values));
+plot(desired_wavelengths, transpose(ideal_opp_values));
+xlim([390 830]);
 figure
-plot(transpose(our_opp_values));
+plot(desired_wavelengths, transpose(our_opp_values));
+xlim([390 830]);
