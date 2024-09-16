@@ -2,7 +2,7 @@
 % image_name = "forest.jpg";
 image_name = "butterflies.jpg";
 red_shift = 0;
-green_shift = 0;
+green_shift = 19;
 
 % Directory to file
 % directory = "C:\Users\YOUR USER HERE\Desktop\test_images";
@@ -29,22 +29,42 @@ s_new_data = interp1(wavelength_data, s_data, desired_wavelengths, 'cubic');
 % LMS_new_cmf = [desired_wavelengths, l_new_data, m_new_data, s_new_data];
 
 %% Shift LMS response data (apply colorblindness)
+% if red_shift ~= 0
+%     for i = 1:(size(l_new_data) + red_shift)
+%         l_new_data(i) = l_new_data(i - red_shift);
+%     end
+%     for i = (size(l_new_data) + red_shift + 1):(size(l_new_data))
+%         l_new_data(i) = 0;
+%     end
+% end
+
+% green shift for negative value
+% if green_shift ~= 0
+%     for i = 1:(size(m_new_data) + green_shift)
+%         m_new_data(i) = m_new_data(i - green_shift);
+%     end
+%     for i = (size(m_new_data) + green_shift + 1):(size(m_new_data))
+%         m_new_data(i) = 0;
+%     end
+% end
+
+% green shift for positive value
+% if green_shift ~= 0
+%     for i = (green_shift+1):(size(m_new_data))
+%         m_new_data(i) = m_new_data(i - green_shift);
+%     end
+%     for i = 1:green_shift
+%         m_new_data(i) = 0;
+%     end
+% end
+
+% nikolai method
 if red_shift ~= 0
-    for i = 1:(size(l_new_data) + red_shift)
-        l_new_data(i) = l_new_data(i - red_shift);
-    end
-    for i = (size(l_new_data) + red_shift + 1):(size(l_new_data))
-        l_new_data(i) = 0;
-    end
+    l_new_data = [ l_new_data(-red_shift + 1 : end) ; zeros(-red_shift, 1) ];
 end
 
 if green_shift ~= 0
-    for i = (green_shift+1):(size(m_new_data))
-        m_new_data(i) = m_new_data(i - green_shift);
-    end
-    for i = 1:green_shift
-        m_new_data(i) = 0;
-    end
+    m_new_data = [ zeros(green_shift, 1) ; m_new_data( 1 : end - green_shift ) ];
 end
 
 paperMatrix = [0.6 0.4 0;
@@ -57,7 +77,16 @@ for i = 1:length(s_new_data)
     opp_new_data(i,:) = paperMatrix * [l_new_data(i); m_new_data(i); s_new_data(i)];
 end
 
+% plotting opponent space data after shift
 figure
 hold on
 plot(390:830, opp_new_data);
 xlim([390 830]);
+
+% plotting cone response data after shift
+% figure
+% hold on
+% plot(desired_wavelengths, l_new_data, 'r')
+% plot(desired_wavelengths, m_new_data, 'g')
+% plot(desired_wavelengths, s_new_data, 'b')
+% xlim([390 830]);
