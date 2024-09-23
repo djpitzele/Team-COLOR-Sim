@@ -1,8 +1,9 @@
 % File name
+clear all;
 % image_name = "forest.jpg";
 image_name = "butterflies.jpg";
-red_shift = 0;
-green_shift = 19;
+red_shift = -15;
+green_shift = 0;
 
 % Directory to file
 % directory = "C:\Users\YOUR USER HERE\Desktop\test_images";
@@ -59,22 +60,40 @@ s_new_data = interp1(wavelength_data, s_data, desired_wavelengths, 'cubic');
 % end
 
 % nikolai method
+% if red_shift ~= 0
+%     l_new_data = [ l_new_data(-red_shift + 1 : end) ; zeros(-red_shift, 1) ];
+% end
+
+% if green_shift ~= 0
+%     m_new_data = [ zeros(green_shift, 1) ; m_new_data( 1 : end - green_shift ) ];
+% end
+
+AreaL = sum(l_new_data);
+AreaM = sum(m_new_data);
+alpha = (20 + red_shift)/20;
+beta = (20 - green_shift)/20;
 if red_shift ~= 0
-    l_new_data = [ l_new_data(-red_shift + 1 : end) ; zeros(-red_shift, 1) ];
+    l_cvd = (0.96)*(AreaL/AreaM)*((alpha*l_new_data)+((1-alpha)*m_new_data));
+else
+    l_cvd = l_new_data;
 end
 
 if green_shift ~= 0
-    m_new_data = [ zeros(green_shift, 1) ; m_new_data( 1 : end - green_shift ) ];
+    m_cvd = (1/0.96)*(AreaM/AreaL)*((beta*m_new_data)+((1-beta)*l_new_data));
+else
+    m_cvd = m_new_data;
 end
 
+% Original
 paperMatrix = [0.6 0.4 0;
                0.24 0.105 -0.7;
                1.2 -1.6 .4];
 
+
 opp_new_data = zeros(length(s_new_data), 3);
 
 for i = 1:length(s_new_data)
-    opp_new_data(i,:) = paperMatrix * [l_new_data(i); m_new_data(i); s_new_data(i)];
+    opp_new_data(i,:) = paperMatrix * [l_cvd(i); m_cvd(i); s_new_data(i)];
 end
 
 % plotting opponent space data after shift
