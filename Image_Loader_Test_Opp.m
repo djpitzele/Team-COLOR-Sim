@@ -2,7 +2,7 @@
 clear all;
 % image_name = "forest.jpg";
 image_name = "butterflies.jpg";
-red_shift = -15;
+red_shift = 0;
 green_shift = 0;
 
 % Directory to file
@@ -74,12 +74,18 @@ alpha = (20 + red_shift)/20;
 beta = (20 - green_shift)/20;
 if red_shift ~= 0
     l_cvd = (0.96)*(AreaL/AreaM)*((alpha*l_new_data)+((1-alpha)*m_new_data));
+    % normalize new CVD values
+    max_val = max(l_cvd);
+    l_cvd = l_cvd ./ max_val;
 else
     l_cvd = l_new_data;
 end
 
 if green_shift ~= 0
     m_cvd = (1/0.96)*(AreaM/AreaL)*((beta*m_new_data)+((1-beta)*l_new_data));
+    % normalize new CVD values
+    max_val = max(m_cvd);
+    m_cvd = m_cvd ./ max_val;
 else
     m_cvd = m_new_data;
 end
@@ -105,7 +111,7 @@ xlim([390 830]);
 % plotting cone response data after shift
 % figure
 % hold on
-% plot(desired_wavelengths, l_new_data, 'r')
-% plot(desired_wavelengths, m_new_data, 'g')
+% plot(desired_wavelengths, l_cvd, 'r')
+% plot(desired_wavelengths, m_cvd, 'g')
 % plot(desired_wavelengths, s_new_data, 'b')
 % xlim([390 830]);
