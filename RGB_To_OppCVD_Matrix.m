@@ -5,7 +5,7 @@
 % image_name = "forest.jpg";
 % image_name = "butterflies.jpg";
 image_name = "color_wheel.png";
-red_shift = -20;
+red_shift = 0;
 green_shift = 0;
 
 % Directory to file
@@ -76,7 +76,8 @@ AreaM = sum(m_new_data);
 alpha = (20 + red_shift)/20;
 beta = (20 - green_shift)/20;
 if red_shift ~= 0
-    l_cvd = (0.96)*(AreaL/AreaM)*((alpha*l_new_data)+((1-alpha)*m_new_data));
+    l_cvd = alpha * l_new_data + (1 - alpha) * 0.96 * (AreaL / AreaM) * m_new_data;
+    % l_cvd = (0.96)*(AreaL/AreaM)*((alpha*l_new_data)+((1-alpha)*m_new_data));
     % normalize new CVD values
     max_val = max(l_cvd);
     l_cvd = l_cvd ./ max_val;
@@ -85,7 +86,8 @@ else
 end
 
 if green_shift ~= 0
-    m_cvd = (1/0.96)*(AreaM/AreaL)*((beta*m_new_data)+((1-beta)*l_new_data));
+    m_cvd = beta * m_new_data + (1 - beta) * (1 / 0.96) * (AreaM / AreaL) * l_new_data;
+    % m_cvd = (1/0.96)*(AreaM/AreaL)*((beta*m_new_data)+((1-beta)*l_new_data));
     % normalize new CVD values
     max_val = max(m_cvd);
     m_cvd = m_cvd ./ max_val;
@@ -162,10 +164,10 @@ rgb2cvd_opp = [RBW_int, GBW_int, BBW_int;
                RBY_int, GBY_int, BBY_int;
                RRG_int, GRG_int, BRG_int];
 
-img_RGB = imread(full_directory);
+original_img_sRGB = imread(full_directory);
+original_img_sRGB = im2double(original_img_sRGB);
 % sRGB to linear RGB
-img_RGB = rgb2lin(img_RGB);
-img_RGB = im2double(img_RGB);
+img_RGB = rgb2lin(original_img_sRGB);
 
 
 
@@ -202,5 +204,18 @@ end
 
 %% going back
 mod_sRGB = lin2rgb(mod_RGB);
+
+% for i = 1:size(mod_sRGB, 1)
+%     for j = 1:size(mod_sRGB, 2)
+%         if (round(mod_sRGB(i, j) - original_img_sRGB(i, j), 2, 'significant') > 0.02)
+%             display("wrong " + i + " " + j)
+%             display(round(mod_sRGB(i, j) - original_img_sRGB(i, j), 2, 'significant'))
+%             display(mod_sRGB(i, j))
+%             display(original_img_sRGB(i, j))
+%            
+%         end
+%     end
+% end
+
 figure
-imshowpair(img_RGB,mod_sRGB,'montage')
+imshowpair(original_img_sRGB,mod_sRGB,'montage')
