@@ -109,9 +109,9 @@ for i = 1:length(s_new_data)
 end
 
 %% Construct power distributions from standard graph data
-r_spd = readtable('R_LED_SPD.csv');
-g_spd = readtable('G_LED_SPD.csv');
-b_spd = readtable('B_LED_SPD.csv');
+r_spd = readtable('LED_SPD_R.csv');
+g_spd = readtable('LED_SPD_G.csv');
+b_spd = readtable('LED_SPD_B.csv');
 
 r_spd = interp1(r_spd{:,1}, r_spd{:,2}, desired_wavelengths, 'linear');
 g_spd = interp1(g_spd{:,1}, g_spd{:,2}, desired_wavelengths, 'linear');
