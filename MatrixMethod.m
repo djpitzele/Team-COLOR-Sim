@@ -3,9 +3,10 @@
 % simulate how a colorblind person would see them.
 
 %% Settings
-image_name = "color_wheel.png";
-red_shift = 0;
-green_shift = 0;
+% image_name = "color_wheel.png";
+image_name = "butterflies.jpg";
+red_shift = 0; % negative
+green_shift = 0; % positive
 
 %% Shifting the image
 original_img_sRGB = imread("test_images/" + image_name);
@@ -30,6 +31,19 @@ end
 
 % linear RGB -> sRGB
 mod_sRGB = lin2rgb(mod_RGB);
+
+% Numerically test difference of images
+% for i = 1:size(mod_sRGB, 1)
+%     for j = 1:size(mod_sRGB, 2)
+%         if (round(mod_sRGB(i, j) - original_img_sRGB(i, j), 2, 'significant') > 0.02)
+%             display("wrong " + i + " " + j)
+%             display(round(mod_sRGB(i, j) - original_img_sRGB(i, j), 2, 'significant'))
+%             display(mod_sRGB(i, j))
+%             display(original_img_sRGB(i, j))
+%            
+%         end
+%     end
+% end
 
 figure
 imshowpair(original_img_sRGB,mod_sRGB,'montage')
