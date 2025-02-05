@@ -1,10 +1,10 @@
 clear all; close all; clc; 
 
 % Settings
-red_shift = -10; % negative
+red_shift = 10; % negative
 green_shift = 0; % positive
-size1 = 240;
-size2 = 320;
+size1 = 480;
+size2 = 640;
 
 % Generate matrices + get resources
 cam = webcam;
@@ -16,7 +16,6 @@ cam.Resolution = strcat(int2str(size2), "x", int2str(size1));
 
 while (1)
     frame = snapshot(cam);
-
     frame = im2double(frame);
     frame = rgb2lin(frame);
 
@@ -27,12 +26,15 @@ while (1)
 %     end
 %     img_opp = applycform(frame, rgb2opp_cvd);
 %     mod_RGB = applycform(frame, opp2rgb);
-    for x = 1:size1
-        for y = 1:size2
-            img_opp(x,y,:) = rgb2opp_cvd * squeeze(frame(x,y,:));
-            mod_RGB(x,y,:) = opp2rgb * squeeze(img_opp(x,y,:));
-        end
-    end
+%     for x = 1:size1
+%         for y = 1:size2
+%             img_opp(x,y,:) = rgb2opp_cvd * squeeze(frame(x,y,:));
+%             mod_RGB(x,y,:) = opp2rgb * squeeze(img_opp(x,y,:));
+%         end
+%     end
+    step_1 = reshape(frame, size1 * size2, 3) * rgb2opp_cvd';
+    step_2 = step_1 * opp2rgb';
+    mod_RGB = reshape(step_2, size1, size2, 3);
 
     mod_sRGB = lin2rgb(mod_RGB);
     imshow(mod_sRGB);
