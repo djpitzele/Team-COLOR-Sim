@@ -1,4 +1,4 @@
-"""
+
 import tkinter as tk
 
 class GameBoard(tk.Frame):
@@ -16,8 +16,8 @@ class GameBoard(tk.Frame):
         submit_button = tk.Button(self, text="Submit", width = 6, height = 2, bg = "green",
                                   command = lambda: self.on_button_click(exit()))
         submit_button.grid(row=4, column=0)
-        button1 = tk.Button(self, text = 'click me!', fg='red', bg='yellow' )
-        button1.grid(row=4, column=1)
+        # button1 = tk.Button(self, text = 'click me!', fg='red', bg='yellow' )
+        # button1.grid(row=4, column=1)
         
         self.pack()
 
@@ -32,9 +32,9 @@ root = tk.Tk()
 board = GameBoard(root)
 root.title("100 Hue Test")
 root.mainloop()
-"""
 
-from tkinter import *
+
+"""from tkinter import *
 import tkinter
 print(tkinter.TkVersion)
 
@@ -48,3 +48,4 @@ button = Button(parent, text = 'Click me !!', bg='red', height = 5, width = 10)
 button.pack()
 #initilizing window
 parent.mainloop()
+"""
