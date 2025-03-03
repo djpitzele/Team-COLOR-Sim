@@ -6,8 +6,9 @@ def read_table(path : str):
     reader = csv.reader(file)
     arr = []
     for row in reader:
-        arr.append(list(map(float, row)))
-    return np.array(arr)
+        arr.append(list(row))
+    
+    return np.array(arr).astype('float64')
 
 def rgb2opp_mat(red_shift, green_shift):
     # Import + interpolate LMS data
@@ -50,11 +51,11 @@ def rgb2opp_mat(red_shift, green_shift):
     # CVD LMS data -> CVD Opponent Space
     # Paper equation 1
     paperMatrix1 = np.array([[0.6, 0.4, 0], [0.24, 0.105, -0.7], [1.2, -1.6, 0.4]])
-
+    cvd_data_stacked = np.stack((l_cvd, m_cvd, s_new_data), axis=-1)
     opp_new_data = np.zeros((s_new_data.shape[0], 3))
-    
-    for i in range(s_new_data.shape[0]): # TODO: make this loop one matrix mult? possible?
-        opp_new_data[i] = np.matmul(paperMatrix1, np.array([l_cvd[i], m_cvd[i], s_new_data[i]]))
+
+    for i in range(cvd_data_stacked.shape[0]):
+        opp_new_data[i] = np.matmul(paperMatrix1, cvd_data_stacked[i])
 
     # Construct power distributions from standard graph data
     r_spd = read_table('../data_tables/LED_SPD_R.csv')
