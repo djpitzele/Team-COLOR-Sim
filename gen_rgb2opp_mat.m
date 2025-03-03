@@ -49,12 +49,12 @@ function rgb2opp_cvd = gen_rgb2opp_mat(red_shift, green_shift)
     end
 
     % Construct power distributions from standard graph data
-    r_spd = readtable('data_tables/Daniel_Red_SPD.csv');
-    g_spd = readtable('data_tables/Daniel_Green_SPD.csv');
-    b_spd = readtable('data_tables/Daniel_Blue_SPD.csv');
-    r_spd1 = readtable('data_tables/LED_SPD_R.csv');
-    g_spd1 = readtable('data_tables/LED_SPD_G.csv');
-    b_spd1 = readtable('data_tables/LED_SPD_B.csv');
+    r_spd1 = readtable('data_tables/Daniel_Red_SPD.csv');
+    g_spd1 = readtable('data_tables/Daniel_Green_SPD.csv');
+    b_spd1 = readtable('data_tables/Daniel_Blue_SPD.csv');
+    r_spd = readtable('data_tables/LED_SPD_R.csv');
+    g_spd = readtable('data_tables/LED_SPD_G.csv');
+    b_spd = readtable('data_tables/LED_SPD_B.csv');
     
     r_spd = interp1(r_spd{:,1}, r_spd{:,2}, desired_wavelengths, 'linear');
     g_spd = interp1(g_spd{:,1}, g_spd{:,2}, desired_wavelengths, 'linear');
