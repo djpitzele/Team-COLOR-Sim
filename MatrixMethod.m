@@ -7,13 +7,18 @@ clear all; close all; clc;
 image_name = "color_wheel.png";
 % image_name = "butterflies.jpg";
 red_shift = 0; % negative
-green_shift = 10; % positive
+green_shift = 0; % positive
 
 %% Shifting the image
 original_img_sRGB = imread("test_images/" + image_name);
 original_img_sRGB = im2double(original_img_sRGB);
 % sRGB -> linear RGB
 img_RGB = rgb2lin(original_img_sRGB);
+
+% OPA testing line (x,y,rgb) 0-1.0
+img_RGB(:,:,1) = img_RGB(:,:,1) + 0.1;
+a = clip([1, 2, 3], 0, 1);
+img_RGB = clip(img_RGB, 0, 1.0);
 
 % Apply CVD shift to image
 opp2rgb = (gen_rgb2opp_mat(0, 0))^-1;
