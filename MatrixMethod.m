@@ -15,9 +15,8 @@ original_img_sRGB = im2double(original_img_sRGB);
 % sRGB -> linear RGB
 img_RGB = rgb2lin(original_img_sRGB);
 
-% OPA testing line (x,y,rgb) 0-1.0
+% OPA testing (x,y,rgb) 0-1.0
 img_RGB(:,:,1) = img_RGB(:,:,1) + 0.1;
-a = clip([1, 2, 3], 0, 1);
 img_RGB = clip(img_RGB, 0, 1.0);
 
 % Apply CVD shift to image

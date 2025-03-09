@@ -72,7 +72,6 @@ def rgb2opp_mat(red_shift, green_shift):
     b_spd = b_spd / np.max(b_spd)
 
     # Element-wise multiplication to simulate integration
-    # TODO: make this more efficient?
     RBW_int = np.sum(r_spd * opp_new_data[:, 0])
     RBY_int = np.sum(r_spd * opp_new_data[:, 1])
     RRG_int = np.sum(r_spd * opp_new_data[:, 2])
