@@ -4,9 +4,9 @@ clear all; close all; clc;
 % simulate how a colorblind person would see them.
 
 %% Settings
-image_name = "color_wheel.png";
-% image_name = "butterflies.jpg";
-red_shift = 0; % negative
+% image_name = "color_wheel.png";
+image_name = "butterflies.jpg";
+red_shift = -15; % negative
 green_shift = 0; % positive
 
 %% Shifting the image
@@ -46,4 +46,5 @@ mod_sRGB2 = lin2rgb(mod_RGB2);
 image_diff(mod_sRGB1, mod_sRGB2)
 
 figure
-imshowpair(original_img_sRGB,mod_sRGB1,'montage')
+imshow(mod_sRGB1)
+% imshowpair(original_img_sRGB,mod_sRGB1,'montage')

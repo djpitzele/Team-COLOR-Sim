@@ -49,9 +49,9 @@ function rgb2opp_cvd = gen_rgb2opp_mat(red_shift, green_shift)
     end
 
     % Construct power distributions from standard graph data
-    r_spd1 = readtable('data_tables/Daniel_Red_SPD.csv');
-    g_spd1 = readtable('data_tables/Daniel_Green_SPD.csv');
-    b_spd1 = readtable('data_tables/Daniel_Blue_SPD.csv');
+    % r_spd1 = readtable('data_tables/Daniel_Red_SPD.csv');
+    % g_spd1 = readtable('data_tables/Daniel_Green_SPD.csv');
+    % b_spd1 = readtable('data_tables/Daniel_Blue_SPD.csv');
     r_spd = readtable('data_tables/LED_SPD_R.csv');
     g_spd = readtable('data_tables/LED_SPD_G.csv');
     b_spd = readtable('data_tables/LED_SPD_B.csv');
@@ -60,28 +60,28 @@ function rgb2opp_cvd = gen_rgb2opp_mat(red_shift, green_shift)
     g_spd = interp1(g_spd{:,1}, g_spd{:,2}, desired_wavelengths, 'linear');
     b_spd = interp1(b_spd{:,1}, b_spd{:,2}, desired_wavelengths, 'linear');
 
-    r_spd1 = interp1(r_spd1{:,1}, r_spd1{:,2}, desired_wavelengths, 'linear');
-    g_spd1 = interp1(g_spd1{:,1}, g_spd1{:,2}, desired_wavelengths, 'linear');
-    b_spd1 = interp1(b_spd1{:,1}, b_spd1{:,2}, desired_wavelengths, 'linear');
+    % r_spd1 = interp1(r_spd1{:,1}, r_spd1{:,2}, desired_wavelengths, 'linear');
+    % g_spd1 = interp1(g_spd1{:,1}, g_spd1{:,2}, desired_wavelengths, 'linear');
+    % b_spd1 = interp1(b_spd1{:,1}, b_spd1{:,2}, desired_wavelengths, 'linear');
 
     % Normalize SPD data
     r_spd = r_spd / max(r_spd);
     g_spd = g_spd / max(g_spd);
     b_spd = b_spd / max(b_spd);
 
-    r_spd1 = r_spd1 / max(r_spd1);
-    g_spd1 = g_spd1 / max(g_spd1);
-    b_spd1 = b_spd1 / max(b_spd1);
+    % r_spd1 = r_spd1 / max(r_spd1);
+    % g_spd1 = g_spd1 / max(g_spd1);
+    % b_spd1 = b_spd1 / max(b_spd1);
 
-    figure
-    hold on
-    grid on
-    plot(desired_wavelengths, r_spd)
-    plot(desired_wavelengths, r_spd1)
-    plot(desired_wavelengths, g_spd)
-    plot(desired_wavelengths, g_spd1)
-    plot(desired_wavelengths, b_spd)
-    plot(desired_wavelengths, b_spd1)
+    % figure
+    % hold on
+    % grid on
+    % plot(desired_wavelengths, r_spd)
+    % plot(desired_wavelengths, r_spd1)
+    % plot(desired_wavelengths, g_spd)
+    % plot(desired_wavelengths, g_spd1)
+    % plot(desired_wavelengths, b_spd)
+    % plot(desired_wavelengths, b_spd1)
     
     % Element-wise multiplication to simulate integration
     % X point integrals
