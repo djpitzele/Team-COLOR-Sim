@@ -3,8 +3,9 @@ import tkinter as tk
 # replace with real colors later
 # 2D array with 4 rows and N_per_col entries per row (like real test)
 N_per_col = 23
-all_colors = [['#ff00ff' for x in range(N_per_col)] for x in range(4)]
-all_colors[0][15] = '#0000ff'
+all_colors_orig = [['#ff00ff' for x in range(N_per_col)] for x in range(4)]
+all_colors_orig[0][15] = '#0000ff'
+all_colors = all_colors_orig.copy()
 
 class GameBoard(tk.Frame):
     def __init__(self, master=None):
@@ -32,18 +33,19 @@ class GameBoard(tk.Frame):
         if self.last_row is None and self.last_col is None:
             self.last_row = row
             self.last_col = col
+            self.grid_buttons[row][col].configure(relief="groove")
         else:
             # check conditions for swap
             if self.last_row == row and 1 <= col <= N_per_col - 2:
                 # make the swap
-                # self.grid_buttons[row][col].grid(row=self.last_row, column=self.last_col)
-                # self.grid_buttons[self.last_row][self.last_col].grid(row=row, column=col)
-                # all_colors[row][col], all_colors[self.last_row][self.last_col] = all_colors[self.last_row][self.last_col], all_colors[row][col]
                 print("swap them")
-                # keep buttons in same place in the array, just swap colors using widget.configure(bg=value) (also swap colors in colors array?)
+                all_colors[row][col], all_colors[self.last_row][self.last_col] = all_colors[self.last_row][self.last_col], all_colors[row][col]
+                self.grid_buttons[row][col].configure(bg=all_colors[row][col])
+                self.grid_buttons[self.last_row][self.last_col].configure(bg=all_colors[self.last_row][self.last_col])
             self.reset_last_click()
         
     def reset_last_click(self):
+        self.grid_buttons[self.last_row][self.last_col].configure(relief="raised")
         self.last_row = None
         self.last_col = None
 

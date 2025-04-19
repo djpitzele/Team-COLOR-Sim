@@ -1,8 +1,8 @@
 clear all; close all; clc; 
 
 % Settings
-red_shift = 0; % negative
-green_shift = 10; % positive
+red_shift = -15; % negative
+green_shift = 0; % positive
 size1 = 360; % smaller
 size2 = 640; % larger
 % 1920x1080, 960x540, 640x360, 320x180
