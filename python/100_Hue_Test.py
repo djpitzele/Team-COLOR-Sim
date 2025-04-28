@@ -1,10 +1,28 @@
-import tkinter as tk
+# NOTE: numpy and OpenCV required, run from python directory inside repo
 
-# replace with real colors later
-# 2D array with 4 rows and N_per_col entries per row (like real test)
+import tkinter as tk
+import csv
+import numpy as np
+import cv2 as cv
+
+def rgb_to_hex(arr):
+    return "#{:02X}{:02X}{:02X}".format(arr[0], arr[1], arr[2])
+
 N_per_col = 23
-all_colors_orig = [['#ff00ff' for x in range(N_per_col)] for x in range(4)]
-all_colors_orig[0][15] = '#0000ff'
+all_colors_LUV = []
+with open('../data_tables/fm100_colors_fixed.csv', 'r') as file:
+    csvreader = csv.reader(file)
+    _header = next(csvreader)
+    for row in csvreader:
+        all_colors_LUV.append(list(map(float, row))[1:])
+all_colors_LUV = np.expand_dims(np.array(all_colors_LUV), 1).astype('float32')
+# all_colors_orig = [['#ff00ff' for x in range(N_per_col)] for x in range(4)]
+# all_colors_orig[0][15] = '#0000ff'
+# 2D array with 4 rows and N_per_col entries per row (like real test)
+all_colors_rgb = (np.squeeze(cv.cvtColor(all_colors_LUV, cv.COLOR_Luv2RGB)) * 255).astype(int)
+all_colors_orig = ['' for x in range(len(all_colors_rgb))]
+for i in range(len(all_colors_rgb)):
+    all_colors_orig[i] = rgb_to_hex(all_colors_rgb[i])
 all_colors = all_colors_orig.copy()
 
 class GameBoard(tk.Frame):
