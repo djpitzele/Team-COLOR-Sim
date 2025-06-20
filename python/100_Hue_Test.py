@@ -1,14 +1,25 @@
 # NOTE: numpy and OpenCV required, run from python directory inside repo
-
-# TODO: remove visual (and effect?) of pressing the buttons at end of the row
-
 import tkinter as tk
 import csv
 import numpy as np
+import random
 import cv2 as cv
 
-num_rows = 1
-N_per_row = 40
+# Settings
+num_rows = 4
+N_per_row = 10 # before duplication
+shuffle = True
+scale = 1.5
+
+def shuffle(ac):
+    # pass in all_colors, return version where rows are shuffled (excluding first and last elements)
+    for i in range(num_rows):
+        lcopy = ac[i][1:N_per_row - 1]
+        random.shuffle(lcopy)
+        ac[i][1:N_per_row - 1] = lcopy
+    return ac
+
+# read in colors
 all_colors = []
 with open('../data_tables/munsell_hex_40.csv', 'r') as file:
     csvreader = csv.reader(file)
@@ -19,6 +30,16 @@ with open('../data_tables/munsell_hex_40.csv', 'r') as file:
             all_colors.append([])
         all_colors[-1].append(row[0].strip())
         i += 1
+
+# duplicate end colors
+for i in range(num_rows):
+    all_colors[(i+1) % num_rows].insert(0, all_colors[i][-1])
+N_per_row += 1
+
+# shuffle if necessary
+if shuffle:
+    all_colors = shuffle(all_colors)
+
 print(f"all colors: {all_colors}")
 
 class GameBoard(tk.Frame):
@@ -27,18 +48,28 @@ class GameBoard(tk.Frame):
         self.last_row = None # row and col of last click
         self.last_col = None
         self.grid_buttons = []
+
+        # create all buttons
         for i in range(num_rows):
             row_buttons = []
             for j in range(N_per_row):
-                button = tk.Button(self, text="", width=2, height=2, bg=all_colors[i][j],
+                button = tk.Button(self, text="", width=int(6*scale), height=int(6*scale), bg=all_colors[i][j],
                                    command=lambda row=i, col=j: self.on_button_click(row, col))
-                button.grid(row=i, column=j)
+                button.grid(row=i, column=j, pady=10)
                 row_buttons.append(button)
             self.grid_buttons.append(row_buttons)
-        # self.grid_buttons[0][0].configure(relief=tk.FLAT) (see chat for how to disable)
-        submit_button = tk.Button(self, text="Submit", width = 6, height = 2, bg = "green",
+
+        # disable buttons at ends of rows
+        for i in range(num_rows):
+            self.grid_buttons[i][0].configure(state=tk.DISABLED)
+            self.grid_buttons[i][N_per_row - 1].configure(state=tk.DISABLED)
+
+        # make submit button and invisible one for spacing
+        submit_button = tk.Button(self, text="Submit", width = int(18*scale), height = int(6*scale), bg = "green",
                                   command = lambda: self.on_button_click(exit()))
         submit_button.grid(row=num_rows, column=0)
+        invis_button = tk.Button(self, text="", width = int(18*scale), height = int(6*scale), bg = "#f0f0f0", fg='#f0f0f0', borderwidth=0)
+        invis_button.grid(row=num_rows, column=N_per_row-1)
         
         self.pack()
 
