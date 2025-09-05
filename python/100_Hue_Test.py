@@ -3,12 +3,13 @@ import tkinter as tk
 import csv
 import numpy as np
 import random
+import copy
 import cv2 as cv
 
 # Settings
 num_rows = 4
 N_per_row = 10 # before duplication
-shuffle = True
+shuffle = False # TODO: fix shuffle
 scale = 1.5
 
 def shuffle(ac):
@@ -31,16 +32,22 @@ with open('../data_tables/munsell_hex_40.csv', 'r') as file:
         all_colors[-1].append(row[0].strip())
         i += 1
 
+# map all colors to their original indices (within their row)
+orig_colors = dict()
+for i in range(num_rows):
+    for j in range(N_per_row):
+        orig_colors[all_colors[i][j]] = j
+
 # duplicate end colors
 for i in range(num_rows):
     all_colors[(i+1) % num_rows].insert(0, all_colors[i][-1])
 N_per_row += 1
 
 # shuffle if necessary
-if shuffle:
-    all_colors = shuffle(all_colors)
+# if shuffle:
+#     all_colors = shuffle(all_colors)
 
-print(f"all colors: {all_colors}")
+print(f"all colors: {all_colors}\n")
 
 class GameBoard(tk.Frame):
     def __init__(self, master=None):
@@ -66,7 +73,7 @@ class GameBoard(tk.Frame):
 
         # make submit button and invisible one for spacing
         submit_button = tk.Button(self, text="Submit", width = int(18*scale), height = int(6*scale), bg = "green",
-                                  command = lambda: self.on_button_click(exit()))
+                                  command = lambda: self.on_submit())
         submit_button.grid(row=num_rows, column=0)
         invis_button = tk.Button(self, text="", width = int(18*scale), height = int(6*scale), bg = "#f0f0f0", fg='#f0f0f0', borderwidth=0)
         invis_button.grid(row=num_rows, column=N_per_row-1)
@@ -90,7 +97,25 @@ class GameBoard(tk.Frame):
                     self.grid_buttons[row][col].configure(bg=all_colors[row][col])
                     self.grid_buttons[self.last_row][self.last_col].configure(bg=all_colors[self.last_row][self.last_col])
                 self.reset_last_click()
+    
+    def on_submit(self):
+        # calculate score
+        total_score = 0
+        for i in range(num_rows):
+            # score first entry manually (since end colors are duplicated)
+            score_first = abs(orig_colors[all_colors[i][1]] - 1)
+            score_first += abs(orig_colors[all_colors[i][1]] - orig_colors[all_colors[i][2]])
+            total_score += score_first
+            for j in range(2, N_per_row - 1):
+                score_this = abs(orig_colors[all_colors[i][j]] - orig_colors[all_colors[i][j - 1]])
+                score_this += abs(orig_colors[all_colors[i][j]] - orig_colors[all_colors[i][j + 1]])
+                total_score += score_this
         
+        score_adj = total_score - ((N_per_row - 2) * num_rows * 2) # adjust score so 0 = perfect
+        print(f"Raw Score: {total_score}")
+        print(f"Adjusted Score: {score_adj}")
+        exit()
+
     def reset_last_click(self):
         self.grid_buttons[self.last_row][self.last_col].configure(relief="raised")
         self.last_row = None
