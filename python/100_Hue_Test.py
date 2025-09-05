@@ -9,10 +9,10 @@ import cv2 as cv
 # Settings
 num_rows = 4
 N_per_row = 10 # before duplication
-shuffle = False # TODO: fix shuffle
+shuffle = True
 scale = 1.5
 
-def shuffle(ac):
+def shuffle_rows(ac):
     # pass in all_colors, return version where rows are shuffled (excluding first and last elements)
     for i in range(num_rows):
         lcopy = ac[i][1:N_per_row - 1]
@@ -44,8 +44,8 @@ for i in range(num_rows):
 N_per_row += 1
 
 # shuffle if necessary
-# if shuffle:
-#     all_colors = shuffle(all_colors)
+if shuffle:
+    all_colors = shuffle_rows(all_colors)
 
 print(f"all colors: {all_colors}\n")
 
