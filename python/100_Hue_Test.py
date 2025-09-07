@@ -3,7 +3,8 @@ import tkinter as tk
 import csv
 import numpy as np
 import random
-import copy
+import datetime
+import os
 import cv2 as cv
 
 # Settings
@@ -99,6 +100,15 @@ class GameBoard(tk.Frame):
                 self.reset_last_click()
     
     def on_submit(self):
+        # save raw user results with a unique date/time stamp
+        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        results_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'user_results')
+        filename = os.path.join(results_dir, f'user_results_{timestamp}.csv')
+        with open(filename, 'w', newline='') as file:
+            csvwriter = csv.writer(file)
+            for i in range(num_rows):
+                csvwriter.writerow(all_colors[i])
+        
         # calculate score
         total_score = 0
         for i in range(num_rows):
