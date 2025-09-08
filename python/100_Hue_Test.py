@@ -12,6 +12,7 @@ num_rows = 4
 N_per_row = 10 # before duplication
 shuffle = True
 scale = 1.5
+colors_csv = '../data_tables/munsell_hex_40.csv'
 
 def shuffle_rows(ac):
     # pass in all_colors, return version where rows are shuffled (excluding first and last elements)
@@ -23,7 +24,7 @@ def shuffle_rows(ac):
 
 # read in colors
 all_colors = []
-with open('../data_tables/munsell_hex_40.csv', 'r') as file:
+with open(colors_csv, 'r') as file:
     csvreader = csv.reader(file)
     _header = next(csvreader)
     i = 0
