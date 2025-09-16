@@ -1,7 +1,7 @@
 clc; clear; close all;
 
 %Enter red or green shift
-red_shift = -15; % negative
+red_shift = 0; % negative
 green_shift = 0; % positive
 
 %Color Shifting matrix
@@ -24,48 +24,38 @@ new_hex = strings(size(hex_colors, 1), 1);
 
 shiftHue = zeros(40, 1); 
 
-
 for i = 1:length(hex_colors)
  % Convert hex to RGB (0-1)
     hex_str = strtrim(string(hex_colors(i,:))); % Converts row to string
     
     % disp(hex_str);
-    
-    % if startsWith(hex_str, '#')
-    %     hex_str = extractAfter(hex_str, 1);
-    % end
-    % if strlength(hex_str) == 6
-    %     rgb = [hex2dec(hex_str(1:2)), hex2dec(hex_str(3:4)), hex2dec(hex_str(5:6))] / 255;
-    % else
-    %     error('Invalid hex string: %s', hex_str);
-    % end
-    % rgb = [hex2dec(hex_str(1:2)), hex2dec(hex_str(3:4)), hex2dec(hex_str(5:6))] / 255;
     rgb = sscanf(hex_str, '%2x%2x%2x', [1 3]) / 255;
-
     % disp(rgb);
     % Apply the color shift matrix
     shifted_rgb = (rgb2rgb_cvd * rgb')';
     % Clip values to [0,1]
     shifted_rgb = max(0, min(1, shifted_rgb));
     shifted_rgb = reshape(shifted_rgb, 1, 3);
-    disp(size(shifted_rgb));
+    % disp(size(shifted_rgb));
 
     % Store new RGB and hex
     new_rgb(i, :) = shifted_rgb;
 
-    new_shift = round(shifted_rgb .* 255);
-    new_hex(i) = sprintf('%02X%02X%02X', new_shift);
-    new_hex(i)
+    % Convert back to hex
+    hexR = upper(dec2hex(round(shifted_rgb(1)*255),2));
+    hexG = upper(dec2hex(round(shifted_rgb(2)*255),2));
+    hexB = upper(dec2hex(round(shifted_rgb(3)*255),2));
+    new_hex(i) = string(strcat('#', hexR, hexG, hexB)); % or strcat('#', hexR, hexG, hexB) for a leading #
+
     shiftHue(i, :) = new_hex(i);
 end
+
+disp(new_hex);
 
 %write new values into munsell_hex_shifted.csv
 hue_data.NewRGB = new_rgb;
 hue_data.NewHex = new_hex;
 
+writematrix(new_hex, 'data_tables/munsell_hex_noShift.csv');
 
-% disp(new_hex);
-
-writematrix(new_hex, 'data_tables/munsell_hex_shifted.csv');
-% writetable(shiftHue, 'data_tables/munsell_hex_shifted.csv');
 
