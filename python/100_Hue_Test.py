@@ -12,11 +12,17 @@ num_rows = 4
 N_per_row = 10 # before duplication
 shuffle = True
 scale = 1.5
+
+# No CVD
 colors_csv = '../data_tables/munsell_hex_40.csv' # original
 # colors_csv = '../data_tables/munsell_hex_red10.csv'
-# colors_csv = '../data_tables/munsell_hex_red15.csv'
 # colors_csv = '../data_tables/munsell_hex_green10.csv'
-# colors_csv = '../data_tables/munsell_hex_green15.csv'
+
+# CVD
+# colors_csv = '../data_tables/munsell_hex_40.csv'
+
+# AL (after CVD)
+# colors_csv = '../data_tables/munsell_hex_AR_17_red.csv'
 
 def shuffle_rows(ac):
     # pass in all_colors, return version where rows are shuffled (excluding first and last elements)
