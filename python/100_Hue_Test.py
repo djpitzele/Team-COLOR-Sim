@@ -16,7 +16,9 @@ scale = 1.5
 # No CVD
 colors_csv = '../data_tables/munsell_hex_40.csv' # original
 # colors_csv = '../data_tables/munsell_hex_red10.csv'
+# colors_csv = '../data_tables/munsell_hex_red15.csv'
 # colors_csv = '../data_tables/munsell_hex_green10.csv'
+# colors_csv = '../data_tables/munsell_hex_green15.csv'
 
 # CVD
 # colors_csv = '../data_tables/munsell_hex_40.csv'
