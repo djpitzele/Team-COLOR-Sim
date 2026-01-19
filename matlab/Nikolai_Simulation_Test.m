@@ -11,7 +11,7 @@ rgb2opp_cvd = gen_rgb2opp_mat( red_shift , green_shift , blue_shift );
 rgb2rgb_cvd = opp_norm2rgb * rgb2opp_cvd; %#ok
 
 % Load image
-original_image = imread("test_images/color_wheel.png");
+original_image = imread("../test_images/color_wheel.png");
 
 % Modify image
 cvd_image = original_image;
@@ -38,16 +38,16 @@ imshowpair(original_image,cvd_image,'montage')
 function rgb2opp = gen_rgb2opp_mat( red_shift , green_shift , blue_shift )
 
     % Load in LMS cone sensitivity functions and interpolate data
-    LMS_cmf = readtable('data_tables/LMS_data.csv');
+    LMS_cmf = readtable('../data_tables/LMS_data.csv');
     wavelengths = 390:1:830;
     l_data = interp1(LMS_cmf{:,1}, LMS_cmf{:,2}, wavelengths, 'cubic');
     m_data = interp1(LMS_cmf{:,1}, LMS_cmf{:,3}, wavelengths, 'cubic');
     s_data = interp1(LMS_cmf{:,1}, LMS_cmf{:,4}, wavelengths, 'cubic');
     
     % Load in RGB SPD and interpolate data
-    r_spd = readtable('data_tables/LED_SPD_R.csv');
-    g_spd = readtable('data_tables/LED_SPD_G.csv');
-    b_spd = readtable('data_tables/LED_SPD_B.csv');
+    r_spd = readtable('../data_tables/LED_SPD_R.csv');
+    g_spd = readtable('../data_tables/LED_SPD_G.csv');
+    b_spd = readtable('../data_tables/LED_SPD_B.csv');
     r_spd = interp1(r_spd{:,1}, r_spd{:,2}, wavelengths, 'linear');
     g_spd = interp1(g_spd{:,1}, g_spd{:,2}, wavelengths, 'linear');
     b_spd = interp1(b_spd{:,1}, b_spd{:,2}, wavelengths, 'linear');

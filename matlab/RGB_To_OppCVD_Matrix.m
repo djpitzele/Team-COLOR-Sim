@@ -17,8 +17,8 @@ green_shift = 0;
 % full_directory = fullfile(directory, image_name);
 
 %% Load in csvs
-XYZ_cmf = readtable('data_tables/XYZ_data.csv');
-LMS_cmf = readtable('data_tables/LMS_data.csv');
+XYZ_cmf = readtable('../data_tables/XYZ_data.csv');
+LMS_cmf = readtable('../data_tables/LMS_data.csv');
 
 %% Interpolate LMS data
 desired_wavelengths = 390:1:830;
@@ -109,9 +109,9 @@ for i = 1:length(s_new_data)
 end
 
 %% Construct power distributions from standard graph data
-r_spd = readtable('data_tables/LED_SPD_R.csv');
-g_spd = readtable('data_tables/LED_SPD_G.csv');
-b_spd = readtable('data_tables/LED_SPD_B.csv');
+r_spd = readtable('../data_tables/LED_SPD_R.csv');
+g_spd = readtable('../data_tables/LED_SPD_G.csv');
+b_spd = readtable('../data_tables/LED_SPD_B.csv');
 
 r_spd = interp1(r_spd{:,1}, r_spd{:,2}, desired_wavelengths, 'linear');
 g_spd = interp1(g_spd{:,1}, g_spd{:,2}, desired_wavelengths, 'linear');
@@ -164,7 +164,7 @@ rgb2cvd_opp = [RBW_int, GBW_int, BBW_int;
                RBY_int, GBY_int, BBY_int;
                RRG_int, GRG_int, BRG_int];
 
-original_img_sRGB = imread("test_images/" + image_name);
+original_img_sRGB = imread("../test_images/" + image_name);
 original_img_sRGB = im2double(original_img_sRGB);
 % sRGB to linear RGB
 img_RGB = rgb2lin(original_img_sRGB);

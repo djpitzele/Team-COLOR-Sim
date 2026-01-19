@@ -11,7 +11,7 @@ opp2rgb = gen_rgb2opp_mat(0, 0)^-1;
 
 rgb2rgb_cvd = opp2rgb * rgb2opp_cvd;
 %Read the csv values
-hue_data = readtable('data_tables/munsell_hex_40.csv', 'Delimiter', ',');
+hue_data = readtable('../data_tables/munsell_hex_40.csv', 'Delimiter', ',');
 hex_colors = hue_data{:,2};
 
 % disp(hex_colors);
@@ -56,6 +56,6 @@ disp(new_hex);
 hue_data.NewRGB = new_rgb;
 hue_data.NewHex = new_hex;
 
-writematrix(new_hex, 'data_tables/munsell_hex_noShift.csv');
+writematrix(new_hex, '../data_tables/munsell_hex_noShift.csv');
 
 

@@ -10,7 +10,7 @@ red_shift = -15; % negative
 green_shift = 0; % positive
 
 %% Shifting the image
-original_img_sRGB = imread("test_images/" + image_name);
+original_img_sRGB = imread("../test_images/" + image_name);
 original_img_sRGB = im2double(original_img_sRGB);
 % sRGB -> linear RGB
 img_RGB = rgb2lin(original_img_sRGB);

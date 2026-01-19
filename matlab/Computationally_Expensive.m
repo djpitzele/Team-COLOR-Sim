@@ -1,16 +1,16 @@
 clear all; close all;
 %%Reading in Image
 
-image_name = "SS_1.png";
+image_name = "butterflies.jpg";
 
-img_RGB = imread(image_name);
+img_RGB = imread('../test_images/' + image_name);
 
 red_shift = 0;
 green_shift = 0;
 
 %XYZ CMF data points
-XYZ_cmf = table2array(readtable('XYZ_data.csv'));
-LMS_cmf = table2array(readtable('LMS_data.csv'));
+XYZ_cmf = table2array(readtable('../data_tables/XYZ_data.csv'));
+LMS_cmf = table2array(readtable('../data_tables/LMS_data.csv'));
 
 % normRGB = normalize(img_RGB);
 

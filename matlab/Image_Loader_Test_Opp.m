@@ -14,8 +14,8 @@ directory = "C:\Users\dpitz\color-sim\Team-COLOR-Sim\test_images";
 full_directory = fullfile(directory, image_name);
 
 %% Load in csvs
-XYZ_cmf = readtable('data_tables/XYZ_data.csv');
-LMS_cmf = readtable('data_tables/LMS_data.csv');
+XYZ_cmf = readtable('../data_tables/XYZ_data.csv');
+LMS_cmf = readtable('../data_tables/LMS_data.csv');
 
 %% Interpolate LMS data
 desired_wavelengths = 390:1:830;

@@ -2,8 +2,8 @@ red_shift = 0;
 green_shift = 0;
 
 %% Load in csvs
-XYZ_cmf = table2array(readtable('XYZ_data.csv'));
-LMS_cmf = table2array(readtable('LMS_data.csv'));
+XYZ_cmf = table2array(readtable('../data_tables/XYZ_data.csv'));
+LMS_cmf = table2array(readtable('../data_tables/LMS_data.csv'));
 our_matrix = table2array(readtable(strcat("red", int2str(red_shift), "green", int2str(green_shift), ".csv")));
 
 lms_to_opp = [0.6, 0.4, 0;
