@@ -15,10 +15,6 @@ original_img_sRGB = im2double(original_img_sRGB);
 % sRGB -> linear RGB
 img_RGB = rgb2lin(original_img_sRGB);
 
-% OPA testing (x,y,rgb) 0-1.0
-img_RGB(:,:,1) = img_RGB(:,:,1) + 0.1;
-img_RGB = clip(img_RGB, 0, 1.0);
-
 % Apply CVD shift to image
 opp2rgb = (gen_rgb2opp_mat(0, 0))^-1;
 rgb2opp_cvd = gen_rgb2opp_mat(red_shift, green_shift);
@@ -43,8 +39,8 @@ mod_sRGB1 = lin2rgb(mod_RGB1);
 mod_sRGB2 = lin2rgb(mod_RGB2);
 
 % Numerically test difference of images
-image_diff(mod_sRGB1, mod_sRGB2)
+image_diff(original_img_sRGB, mod_sRGB2)
 
 figure
-imshow(mod_sRGB1)
-% imshowpair(original_img_sRGB,mod_sRGB1,'montage')
+% imshow(mod_sRGB1)
+imshowpair(original_img_sRGB,mod_sRGB2,'montage')
