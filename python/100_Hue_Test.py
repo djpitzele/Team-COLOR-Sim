@@ -86,7 +86,7 @@ class GameBoard(tk.Frame):
             self.grid_buttons[i][N_per_row - 1].configure(state=tk.DISABLED)
 
         # make submit button and invisible one for spacing
-        submit_button = tk.Button(self, text="Submit", width = int(18*scale), height = int(6*scale), bg = "green",
+        submit_button = tk.Button(self, text="Submit", width = int(4*scale), height = int(1*scale), font=("Arial", 36), bg = "green",
                                   command = lambda: self.on_submit())
         submit_button.grid(row=num_rows, column=0)
         invis_button = tk.Button(self, text="", width = int(18*scale), height = int(6*scale), bg = "#f0f0f0", fg='#f0f0f0', borderwidth=0)
