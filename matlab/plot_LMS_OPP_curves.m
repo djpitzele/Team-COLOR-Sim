@@ -34,6 +34,9 @@ function plot_LMS_OPP_curves(red_shift , green_shift , blue_shift , fsize, lwidt
 
     % Plot and export data
     outputfolder = fullfile(pwd,"plots");
+    if ~isfolder("plots")
+        mkdir("plots");
+    end
     figure('Position', [100, 100, width, height]);
     xlabel('Wavelength (nm)')
     ylabel('Relative Sensitivity')
