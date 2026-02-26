@@ -9,7 +9,7 @@ function plot_LMS_OPP_curves(red_shift , green_shift , blue_shift , fsize, lwidt
     % Shift cone fundamentals data
     AreaL = sum(l_data);
     AreaM = sum(m_data);
-    alpha = ( 20 + red_shift ) / 20;
+    alpha = ( 20 - red_shift ) / 20;
     beta = ( 20 - green_shift ) / 20;
     l_cvd = alpha * l_data + ( 1 - alpha ) * 0.96 * ( AreaL / AreaM ) * m_data;
     m_cvd = beta * m_data + ( 1 - beta) * ( 1 / 0.96 ) * ( AreaM / AreaL ) * l_data;
